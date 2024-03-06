@@ -1,0 +1,61 @@
+# Copyright 2024 Khalil Estell
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 🚀 deploy
+
+on:
+  workflow_dispatch:
+  pull_request:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: 📥 Install CMake & Conan
+        run: pip3 install cmake conan==2.1.0
+
+      - name: 📡 Add `libhal-trunk` conan remote
+        run: conan remote add libhal-trunk
+          https://libhal.jfrog.io/artifactory/api/conan/trunk-conan
+
+      - name: 📡 Create and setup default profile
+        run: conan profile detect --force
+
+      - name: 👁️‍🗨️ Show conan profile
+        run: conan profile show
+
+      - name: 📦 Create Conan Package
+        run: conan create .
+
+      - name: 📡 Sign into JFrog Artifactory
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          API_KEY: ${{ secrets.JFROG_LIBHAL_TRUNK_API_KEY }}
+          JFROG_USER: ${{ secrets.JFROG_LIBHAL_TRUNK_USER }}
+        run: conan remote login -p $API_KEY libhal-trunk $JFROG_USER
+
+      - name: 🆙 Upload package to `libhal-trunk` repo
+        if: startsWith(github.ref, 'refs/tags/')
+        run: conan upload "libhal-exceptions/*" --confirm -r=libhal-trunk
