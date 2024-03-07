@@ -72,7 +72,7 @@ class demo:
 
 def add_library_requirements(conan_file: ConanFile):
     conan_file.requires("libhal/[^3.0.0]", transitive_headers=True)
-    conan_file.requires("libhal-util/[^4.0.0]")
+    conan_file.requires("libhal-util/[^4.0.0]", transitive_headers=True)
 
 
 class library:
@@ -170,5 +170,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "0.0.2"
+    version = "0.0.3"
     package_type = "python-require"
