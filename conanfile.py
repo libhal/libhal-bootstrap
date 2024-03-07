@@ -22,22 +22,22 @@ import os
 required_conan_version = ">=2.0.14"
 
 
-def add_demo_requirements(conan_file: ConanFile):
-    platform = str(conan_file.options.platform)
+def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
+    if not is_platform:
+        platform = str(conan_file.options.platform)
+        if platform.startswith("lpc40"):
+            conan_file.output.warning("Using lpc40 platform library!!")
+            conan_file.requires("libhal-lpc40/[^3.0.0]")
+            conan_file.requires("libhal-exceptions/[^0.0.1]")
 
-    if platform.startswith("lpc40"):
-        conan_file.output.warning("Using lpc40 platform library!!")
-        conan_file.requires("libhal-lpc40/[^3.0.0]")
-        conan_file.requires(
-            f"prebuilt-picolibc/{str(conan_file.settings.compiler.version)}")
-        conan_file.requires(f"libhal-exceptions/[^0.0.1]")
+        elif platform.startswith("stm32f1"):
+            conan_file.output.warning("Using stm32f1 platform library!!")
+            conan_file.requires("libhal-stm32f1/[^3.0.0]")
+            conan_file.requires("libhal-exceptions/[^0.0.1]")
 
-    elif platform.startswith("stm32f1"):
-        conan_file.output.warning("Using stm32f1 platform library!!")
-        conan_file.requires("libhal-stm32f1/[^3.0.0]")
-        conan_file.requires(
-            f"prebuilt-picolibc/{str(conan_file.settings.compiler.version)}")
-        conan_file.requires(f"libhal-exceptions/[^0.0.1]")
+    if conan_file.settings.os == "baremetal":
+        compiler_version = str(conan_file.settings.compiler.version)
+        conan_file.requires("prebuilt-picolibc/" + compiler_version)
 
     conan_file.requires("libhal-util/[^4.0.0]")
 
@@ -77,7 +77,7 @@ def add_library_requirements(conan_file: ConanFile):
 
 class library:
     settings = "compiler", "build_type", "os", "arch"
-    exports_sources = ("include/*", "tests/*", "LICENSE",
+    exports_sources = ("include/*", "linker_scripts/*", "tests/*", "LICENSE",
                        "CMakeLists.txt", "src/*")
 
     @property
@@ -133,6 +133,10 @@ class library:
              "*.hpp",
              dst=os.path.join(self.package_folder, "include"),
              src=os.path.join(self.source_folder, "include"))
+        copy(self,
+             "*.ld",
+             dst=os.path.join(self.package_folder, "linker_scripts"),
+             src=os.path.join(self.source_folder, "linker_scripts"))
 
         cmake = CMake(self)
         cmake.install()
@@ -166,5 +170,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "0.0.1"
+    version = "0.0.2"
     package_type = "python-require"
