@@ -28,16 +28,10 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         if platform.startswith("lpc40"):
             conan_file.output.warning("Using lpc40 platform library!!")
             conan_file.requires("libhal-lpc40/[^3.0.0]")
-            conan_file.requires("libhal-exceptions/[^0.0.1]")
 
         elif platform.startswith("stm32f1"):
             conan_file.output.warning("Using stm32f1 platform library!!")
             conan_file.requires("libhal-stm32f1/[^3.0.0]")
-            conan_file.requires("libhal-exceptions/[^0.0.1]")
-
-    if conan_file.settings.os == "baremetal":
-        compiler_version = str(conan_file.settings.compiler.version)
-        conan_file.requires("prebuilt-picolibc/" + compiler_version)
 
     conan_file.requires("libhal-util/[^4.0.0]")
 
@@ -181,5 +175,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "0.0.5"
+    version = "0.0.6"
     package_type = "python-require"
