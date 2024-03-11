@@ -175,5 +175,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "0.0.7"
+    version = "1.0.0"
     package_type = "python-require"
