@@ -27,7 +27,7 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         platform = str(conan_file.options.platform)
         if platform.startswith("lpc40"):
             conan_file.output.warning("Using lpc40 platform library!!")
-            conan_file.requires("libhal-lpc40/[^3.0.1]")
+            conan_file.requires("libhal-lpc40/[^3.0.3]")
 
         elif platform.startswith("stm32f1"):
             conan_file.output.warning("Using stm32f1 platform library!!")
@@ -175,5 +175,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "1.0.0"
+    version = "1.0.1"
     package_type = "python-require"
