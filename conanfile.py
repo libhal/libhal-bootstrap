@@ -113,6 +113,7 @@ class library:
         cmake.generate()
 
     def build_requirements(self):
+        self.tool_requires("cmake/3.27.1")
         self.tool_requires("libhal-cmake-util/[^4.0.3]")
         self.test_requires("libhal-mock/[^3.0.0]")
         self.test_requires("boost-ext-ut/1.1.9")
@@ -175,5 +176,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "1.0.2"
+    version = "1.0.3"
     package_type = "python-require"
