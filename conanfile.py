@@ -27,13 +27,13 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         platform = str(conan_file.options.platform)
         if platform.startswith("lpc40"):
             conan_file.output.warning("Using lpc40 platform library!!")
-            conan_file.requires("libhal-lpc40/[^3.0.4]")
+            conan_file.requires("libhal-lpc40/[^4.0.0]")
 
         elif platform.startswith("stm32f1"):
             conan_file.output.warning("Using stm32f1 platform library!!")
-            conan_file.requires("libhal-stm32f1/[^3.0.0]")
+            conan_file.requires("libhal-stm32f1/[^4.0.0]")
 
-    conan_file.requires("libhal-util/[^4.0.0]")
+    conan_file.requires("libhal-util/[^5.0.0]")
 
 
 class demo:
@@ -47,7 +47,7 @@ class demo:
 
     def build_requirements(self):
         self.tool_requires("cmake/3.27.1")
-        self.tool_requires("libhal-cmake-util/[^4.0.3]")
+        self.tool_requires("libhal-cmake-util/[^4.1.2]")
 
     def generate(self):
         virt = VirtualBuildEnv(self)
@@ -67,8 +67,8 @@ class demo:
 def add_library_requirements(conan_file: ConanFile,
                              override_libhal_version: str | None = None,
                              override_libhal_util_version: str | None = None):
-    libhal_version = "3.1.0"
-    libhal_util_version = "4.0.1"
+    libhal_version = "4.0.0"
+    libhal_util_version = "5.0.0"
     if override_libhal_version:
         libhal_version = override_libhal_version
 
@@ -114,8 +114,8 @@ class library:
 
     def build_requirements(self):
         self.tool_requires("cmake/3.27.1")
-        self.tool_requires("libhal-cmake-util/[^4.0.3]")
-        self.test_requires("libhal-mock/[^3.0.0]")
+        self.tool_requires("libhal-cmake-util/[^4.1.2]")
+        self.test_requires("libhal-mock/[^4.0.0]")
         self.test_requires("boost-ext-ut/1.1.9")
 
     def requirements(self):
@@ -176,5 +176,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "1.0.3"
+    version = "2.0.0"
     package_type = "python-require"
