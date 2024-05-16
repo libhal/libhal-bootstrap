@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: 📥 Install CMake & Conan
-        run: pip3 install cmake conan==2.1.0
+        run: pip3 install cmake conan==2.2.2
 
       - name: 📡 Add `libhal-trunk` conan remote
         run: conan remote add libhal-trunk

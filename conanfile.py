@@ -38,12 +38,25 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
 
 class demo:
     settings = "compiler", "build_type", "os", "arch", "libc"
-    options = {"platform": ["ANY"]}
-    default_options = {"platform": "unspecified"}
+    options = {
+        "platform": ["ANY"],
+        "micromod_board": ["ANY"],
+    }
+    default_options = {
+        "platform": "unspecified",
+        "micromod_board": "unspecified",
+    }
 
     def layout(self):
-        platform_directory = "build/" + str(self.options.platform)
-        cmake_layout(self, build_folder=platform_directory)
+        if "micromod" == str(self.options.platform):
+            build_path = os.path.join("build",
+                                      str(self.options.platform),
+                                      str(self.options.micromod_board))
+            cmake_layout(self, build_folder=build_path)
+        else:
+            build_path = os.path.join("build",
+                                      str(self.options.platform))
+            cmake_layout(self, build_folder=build_path)
 
     def build_requirements(self):
         self.tool_requires("cmake/3.27.1")
@@ -176,5 +189,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "2.0.0"
+    version = "2.1.0"
     package_type = "python-require"
