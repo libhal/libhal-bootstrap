@@ -33,6 +33,10 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
             conan_file.output.warning("Using stm32f1 platform library!!")
             conan_file.requires("libhal-stm32f1/[^4.0.0]")
 
+        elif platform == "micromod":
+            conan_file.output.warning("Using micromod platform library!!")
+            conan_file.requires("libhal-micromod/[^1.0.0]")
+
     conan_file.requires("libhal-util/[^5.0.0]")
 
 
@@ -189,5 +193,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "2.1.0"
+    version = "2.1.1"
     package_type = "python-require"
