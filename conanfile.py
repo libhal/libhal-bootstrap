@@ -25,17 +25,16 @@ required_conan_version = ">=2.2.2"
 def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
     if not is_platform:
         platform = str(conan_file.options.platform)
-        if platform.startswith("lpc40"):
-            conan_file.output.warning("Using lpc40 platform library!!")
-            conan_file.requires("libhal-lpc40/[^5.1.0]")
+        architecture = str(conan_file.settings.arch)
 
-        elif platform.startswith("stm32f1"):
-            conan_file.output.warning("Using stm32f1 platform library!!")
-            conan_file.requires("libhal-stm32f1/[^5.0.0]")
-
-        elif platform == "micromod":
+        if platform == "micromod":
             conan_file.output.warning("Using micromod platform library!!")
             conan_file.requires("libhal-micromod/[^1.0.1]")
+        elif architecture.startswith("cortex-m"):
+            conan_file.output.warning("Using ARM MCU platform library!!")
+            conan_file.requires("libhal-arm-mcu/[^1.0.0]")
+        else:
+            conan_file.output.warning("No platform library added...")
 
     conan_file.requires("libhal-util/[^5.0.0]")
 
@@ -193,5 +192,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "3.0.0"
+    version = "4.0.0"
     package_type = "python-require"
