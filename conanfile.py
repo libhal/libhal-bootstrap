@@ -29,7 +29,7 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
 
         if platform == "micromod":
             conan_file.output.warning("Using micromod platform library!!")
-            conan_file.requires("libhal-micromod/[^1.0.3]")
+            conan_file.requires("libhal-micromod/[^1.1.0]")
         elif architecture.startswith("cortex-m"):
             conan_file.output.warning("Using ARM MCU platform library!!")
             conan_file.requires("libhal-arm-mcu/[^1.0.0]")
