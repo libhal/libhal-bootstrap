@@ -36,7 +36,7 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         else:
             conan_file.output.warning("No platform library added...")
 
-    conan_file.requires("libhal-util/[^5.0.0]")
+    conan_file.requires("libhal-util/[^5.3.1]")
 
 
 class demo:
@@ -192,5 +192,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.0.2"
+    version = "4.0.3"
     package_type = "python-require"
