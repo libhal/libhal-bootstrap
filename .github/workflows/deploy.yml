@@ -52,9 +52,9 @@ jobs:
       - name: 📡 Sign into JFrog Artifactory
         if: startsWith(github.ref, 'refs/tags/')
         env:
-          API_KEY: ${{ secrets.JFROG_LIBHAL_TRUNK_API_KEY }}
-          JFROG_USER: ${{ secrets.JFROG_LIBHAL_TRUNK_USER }}
-        run: conan remote login -p $API_KEY libhal-trunk $JFROG_USER
+          PASSWORD: ${{ secrets.JFROG_LIBHAL_TRUNK_ID_TOKEN }}
+          JFROG_USER: ${{ secrets.JFROG_LIBHAL_TRUNK_ID_TOKEN_USER }}
+        run: conan remote login -p $PASSWORD libhal $JFROG_USER
 
       - name: 🆙 Upload package to `libhal-trunk` repo
         if: startsWith(github.ref, 'refs/tags/')
