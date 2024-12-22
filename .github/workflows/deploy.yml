@@ -54,7 +54,7 @@ jobs:
         env:
           PASSWORD: ${{ secrets.JFROG_LIBHAL_TRUNK_ID_TOKEN }}
           JFROG_USER: ${{ secrets.JFROG_LIBHAL_TRUNK_ID_TOKEN_USER }}
-        run: conan remote login -p $PASSWORD libhal $JFROG_USER
+        run: conan remote login -p $PASSWORD libhal-trunk $JFROG_USER
 
       - name: 🆙 Upload package to `libhal-trunk` repo
         if: startsWith(github.ref, 'refs/tags/')
