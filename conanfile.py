@@ -28,15 +28,17 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         architecture = str(conan_file.settings.arch)
 
         if platform == "micromod":
-            conan_file.output.warning("Using micromod platform library!!")
+            conan_file.output.warning(
+                "libhal-micromod usable platform detected...")
             conan_file.requires("libhal-micromod/[^1.1.0]")
         elif architecture.startswith("cortex-m"):
-            conan_file.output.warning("Using ARM MCU platform library!!")
+            conan_file.output.warning(
+                "libhal-arm-mcu usable platform detected...")
             conan_file.requires("libhal-arm-mcu/[^1.0.0]")
         else:
             conan_file.output.warning("No platform library added...")
 
-    conan_file.requires("libhal-util/[^5.3.1]")
+    conan_file.requires("libhal-util/[^5.4.0]")
 
 
 class demo:
@@ -83,15 +85,17 @@ class demo:
 def add_library_requirements(conan_file: ConanFile,
                              override_libhal_version: str | None = None,
                              override_libhal_util_version: str | None = None):
-    libhal_version = "4.0.0"
-    libhal_util_version = "5.0.0"
+    libhal_version = "4.9.0"
+    libhal_util_version = "5.4.0"
     if override_libhal_version:
         libhal_version = override_libhal_version
 
     if override_libhal_util_version:
         libhal_util_version = override_libhal_util_version
 
-    conan_file.requires(f"libhal/[^{libhal_version}]", transitive_headers=True)
+    conan_file.requires(
+        f"libhal/[^{libhal_version}]",
+        transitive_headers=True)
     conan_file.requires(
         f"libhal-util/[^{libhal_util_version}]", transitive_headers=True)
 
@@ -192,5 +196,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.0.3"
+    version = "4.1.0"
     package_type = "python-require"
