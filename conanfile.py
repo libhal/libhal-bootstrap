@@ -136,7 +136,7 @@ class library:
         self.tool_requires("cmake/3.27.1")
         self.tool_requires("libhal-cmake-util/[^4.1.2]")
         self.test_requires("libhal-mock/[^4.0.0]")
-        self.test_requires("boost-ext-ut/1.1.9")
+        self.test_requires("boost-ext-ut/2.1.0")
 
     def requirements(self):
         pass
@@ -196,5 +196,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.1.0"
+    version = "4.1.1"
     package_type = "python-require"
