@@ -76,6 +76,13 @@ class demo:
         tc.cache_variables["CONAN_LIBC"] = str(self.settings.libc)
         tc.generate()
 
+        # FIXME:
+        # # Generates and moves compile_commands.json to root of project
+        # print("[DEBUG] Generating copy_compile_commands")
+        # cmake = CMake(self)
+        # cmake.configure()
+        # cmake.build(target="copy_compile_commands")
+
     def build(self):
         cmake = CMake(self)
         cmake.configure()
@@ -131,6 +138,12 @@ class library:
         tc.generate()
         cmake = CMakeDeps(self)
         cmake.generate()
+
+        # Generates and moves compile_commands.json to root of project
+        print("[DEBUG] Generating copy_compile_commands")
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build(target="copy_compile_commands")
 
     def build_requirements(self):
         self.tool_requires("cmake/3.27.1")
@@ -196,5 +209,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.1.1"
+    version = "4.2.1"
     package_type = "python-require"
