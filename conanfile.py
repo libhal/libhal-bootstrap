@@ -64,6 +64,7 @@ class demo:
             cmake_layout(self, build_folder=build_path)
 
     def build_requirements(self):
+        self.tool_requires("make/4.4.1")
         self.tool_requires("cmake/3.27.1")
         self.tool_requires("libhal-cmake-util/[^4.1.2]")
 
@@ -133,6 +134,7 @@ class library:
         cmake.generate()
 
     def build_requirements(self):
+        self.tool_requires("make/4.4.1")
         self.tool_requires("cmake/3.27.1")
         self.tool_requires("libhal-cmake-util/[^4.1.2]")
         self.test_requires("libhal-mock/[^4.0.0]")
@@ -170,6 +172,7 @@ class library:
 
 class library_test_package:
     def build_requirements(self):
+        self.tool_requires("make/4.4.1")
         self.tool_requires("cmake/3.27.1")
 
     def layout(self):
