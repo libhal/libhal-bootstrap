@@ -42,7 +42,7 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
 
 
 class demo:
-    settings = "compiler", "build_type", "os", "arch", "libc"
+    settings = "compiler", "build_type", "os", "arch"
     options = {
         "platform": ["ANY"],
         "micromod_board": ["ANY"],
@@ -66,7 +66,7 @@ class demo:
     def build_requirements(self):
         self.tool_requires("make/4.4.1")
         self.tool_requires("cmake/3.27.1")
-        self.tool_requires("libhal-cmake-util/[^4.1.2]")
+        self.tool_requires("libhal-cmake-util/[^4.3.3]")
 
     def generate(self):
         virt = VirtualBuildEnv(self)
@@ -74,7 +74,6 @@ class demo:
         cmake = CMakeDeps(self)
         cmake.generate()
         tc = CMakeToolchain(self)
-        tc.cache_variables["CONAN_LIBC"] = str(self.settings.libc)
         tc.generate()
 
     def build(self):
@@ -136,7 +135,7 @@ class library:
     def build_requirements(self):
         self.tool_requires("make/4.4.1")
         self.tool_requires("cmake/3.27.1")
-        self.tool_requires("libhal-cmake-util/[^4.1.2]")
+        self.tool_requires("libhal-cmake-util/[^4.3.3]")
         self.test_requires("libhal-mock/[^4.0.0]")
         self.test_requires("boost-ext-ut/2.1.0")
 
@@ -199,5 +198,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.2.0"
+    version = "4.3.0"
     package_type = "python-require"
