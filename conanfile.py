@@ -1,4 +1,4 @@
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +42,47 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
 
 
 class demo:
+    settings = "compiler", "build_type", "os", "arch"
+    options = {
+        "platform": ["ANY"],
+        "micromod_board": ["ANY"],
+    }
+    default_options = {
+        "platform": "unspecified",
+        "micromod_board": "unspecified",
+    }
+
+    def layout(self):
+        if "micromod" == str(self.options.platform):
+            build_path = os.path.join("build",
+                                      str(self.options.platform),
+                                      str(self.options.micromod_board))
+            cmake_layout(self, build_folder=build_path)
+        else:
+            build_path = os.path.join("build",
+                                      str(self.options.platform))
+            cmake_layout(self, build_folder=build_path)
+
+    def build_requirements(self):
+        self.tool_requires("make/4.4.1")
+        self.tool_requires("cmake/3.27.1")
+        self.tool_requires("libhal-cmake-util/[^4.3.3]")
+
+    def generate(self):
+        virt = VirtualBuildEnv(self)
+        virt.generate()
+        cmake = CMakeDeps(self)
+        cmake.generate()
+        tc = CMakeToolchain(self)
+        tc.generate()
+
+    def build(self):
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
+
+
+class app:
     settings = "compiler", "build_type", "os", "arch"
     options = {
         "platform": ["ANY"],
@@ -219,5 +260,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.2.1"
+    version = "4.3.0"
     package_type = "python-require"
