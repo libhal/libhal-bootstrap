@@ -124,8 +124,8 @@ class app:
 
 
 def add_library_requirements(conan_file: ConanFile,
-                             override_libhal_version: str | None = None,
-                             override_libhal_util_version: str | None = None):
+                             override_libhal_version: str = None,
+                             override_libhal_util_version: str = None):
     libhal_version = "4.9.0"
     libhal_util_version = "5.4.0"
     if override_libhal_version:
@@ -260,5 +260,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.3.0"
+    version = "4.3.1"
     package_type = "python-require"
