@@ -22,7 +22,9 @@ import os
 required_conan_version = ">=2.2.2"
 
 
-def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
+def add_demo_requirements(conan_file: ConanFile,
+                          is_platform: bool = False,
+                          inject_util: bool = True):
     if not is_platform:
         platform = str(conan_file.options.platform)
         architecture = str(conan_file.settings.arch)
@@ -42,7 +44,8 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         else:
             conan_file.output.warning("No platform library added...")
 
-    conan_file.requires("libhal-util/[^5.4.0]")
+    if inject_util:
+        conan_file.requires("libhal-util/[^5.4.0]")
 
 
 class demo:
