@@ -38,7 +38,7 @@ def add_demo_requirements(conan_file: ConanFile, is_platform: bool = False):
         elif platform.startswith("mac"):
             conan_file.output.warning(
                 "libhal-mac usable platform detected...")
-            conan_file.requires("libhal-mac/[^1.0.0]")
+            conan_file.requires("libhal-mac/[^1.1.0]")
         else:
             conan_file.output.warning("No platform library added...")
 
@@ -264,5 +264,5 @@ class library_test_package:
 
 class libhal_bootstrap(ConanFile):
     name = "libhal-bootstrap"
-    version = "4.4.0"
+    version = "4.4.1"
     package_type = "python-require"
