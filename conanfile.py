@@ -71,16 +71,19 @@ class demo:
             cmake_layout(self, build_folder=build_path)
 
     def build_requirements(self):
-        self.tool_requires("make/4.4.1")
-        self.tool_requires("cmake/3.27.1")
+        self.tool_requires("ninja/[^1.0.0]")
+        self.tool_requires("cmake/[>=3.28.0 <5.0.0]")
         self.tool_requires("libhal-cmake-util/[^4.3.3]")
 
     def generate(self):
         virt = VirtualBuildEnv(self)
         virt.generate()
+
         cmake = CMakeDeps(self)
         cmake.generate()
+
         tc = CMakeToolchain(self)
+        tc.generator = "Ninja"
         tc.generate()
 
     def build(self):
@@ -112,16 +115,19 @@ class app:
             cmake_layout(self, build_folder=build_path)
 
     def build_requirements(self):
-        self.tool_requires("make/4.4.1")
-        self.tool_requires("cmake/3.27.1")
+        self.tool_requires("ninja/[^1.0.0]")
+        self.tool_requires("cmake/[>=3.28.0 <5.0.0]")
         self.tool_requires("libhal-cmake-util/[^4.3.3]")
 
     def generate(self):
         virt = VirtualBuildEnv(self)
         virt.generate()
+
         cmake = CMakeDeps(self)
         cmake.generate()
+
         tc = CMakeToolchain(self)
+        tc.generator = "Ninja"
         tc.generate()
 
     def build(self):
@@ -175,14 +181,17 @@ class library:
     def generate(self):
         virt = VirtualBuildEnv(self)
         virt.generate()
-        tc = CMakeToolchain(self)
-        tc.generate()
+
         cmake = CMakeDeps(self)
         cmake.generate()
 
+        tc = CMakeToolchain(self)
+        tc.generator = "Ninja"
+        tc.generate()
+
     def build_requirements(self):
-        self.tool_requires("make/4.4.1")
-        self.tool_requires("cmake/3.27.1")
+        self.tool_requires("ninja/[^1.0.0]")
+        self.tool_requires("cmake/[>=3.28.0 <5.0.0]")
         self.tool_requires("libhal-cmake-util/[^4.3.3]")
         self.test_requires("libhal-mock/[^4.0.0]")
         self.test_requires("boost-ext-ut/2.1.0")
@@ -219,40 +228,22 @@ class library:
 
 class library_test_package:
     def build_requirements(self):
-        self.tool_requires("make/4.4.1")
-        self.tool_requires("cmake/3.27.1")
+        self.tool_requires("ninja/[^1.0.0]")
+        self.tool_requires("cmake/[>=3.28.0 <5.0.0]")
 
     def layout(self):
         cmake_layout(self)
 
-    def _add_arm_specs_if_applicable(self, tc: CMakeToolchain):
-        should_add_flags = (self.settings.os == "baremetal"
-                            and self.settings.compiler == "gcc"
-                            and str(self.settings.arch).startswith("cortex-m"))
-
-        if not should_add_flags:
-            return
-
-        LIB_C_FLAGS = ["--specs=nano.specs", "--specs=nosys.specs"]
-        LIB_C_FLAGS_STR = " ".join(LIB_C_FLAGS)
-        self.output.info(f"Baremetal ARM GCC Profile detected!")
-        self.output.info(f'💉 injecting >> "{LIB_C_FLAGS_STR}"')
-        link_flags = tc.variables.get("CMAKE_EXE_LINKER_FLAGS", "")
-        link_flags = link_flags + f" {LIB_C_FLAGS_STR}"
-        link_flags = link_flags.strip()
-        tc.variables["CMAKE_EXE_LINKER_FLAGS"] = link_flags
-        FINAL_FLAGS = tc.variables["CMAKE_EXE_LINKER_FLAGS"]
-        self.output.info(
-            f'tc.variables["CMAKE_EXE_LINKER_FLAGS"] = "{FINAL_FLAGS}"')
-
     def generate(self):
         virt = VirtualBuildEnv(self)
         virt.generate()
-        tc = CMakeToolchain(self)
-        self._add_arm_specs_if_applicable(tc)
-        tc.generate()
+
         cmake = CMakeDeps(self)
         cmake.generate()
+
+        tc = CMakeToolchain(self)
+        tc.generator = "Ninja"
+        tc.generate()
 
     def build(self):
         cmake = CMake(self)
