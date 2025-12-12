@@ -194,7 +194,7 @@ class library:
         self.tool_requires("cmake/[>=3.28.0 <5.0.0]")
         self.tool_requires("libhal-cmake-util/[^4.3.3]")
         self.test_requires("libhal-mock/[^4.0.0]")
-        self.test_requires("boost-ext-ut/2.1.0")
+        self.test_requires("boost-ext-ut/2.3.1")
 
     def requirements(self):
         pass
